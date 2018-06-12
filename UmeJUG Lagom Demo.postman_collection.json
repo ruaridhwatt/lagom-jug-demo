@@ -1,0 +1,466 @@
+{
+	"info": {
+		"_postman_id": "2dddd2f4-f893-c40e-3950-d8f724bc5fb3",
+		"name": "UmeJUG Lagom Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TokenService",
+			"description": "",
+			"item": [
+				{
+					"name": "getJwkSet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "816827d4-9731-4c24-a569-0e6ea4841b5a",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test(\"Keys array not empty\", function () {",
+									"    var jsonData = pm.response.json()",
+									"    pm.expect(jsonData.keys).to.be.an('array').that.is.not.empty",
+									"})"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{protocol}}{{domain}}:{{port}}/token/jwks",
+							"host": [
+								"{{protocol}}{{domain}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"token",
+								"jwks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0e8d2c88-ea0a-4f70-9272-a162b919d77a",
+								"type": "text/javascript",
+								"exec": [
+									"pm.environment.set(\"accessToken\", pm.response.json().accessToken);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"idToken\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJzdWIiOiIxMjM0NSIsInVzZXJuYW1lIjoicnVyaSJ9.\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}{{domain}}:{{port}}/token",
+							"host": [
+								"{{protocol}}{{domain}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FlashcardService",
+			"description": "",
+			"item": [
+				{
+					"name": "SetOps",
+					"description": "",
+					"item": [
+						{
+							"name": "Flashcard Set",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ae7e2660-b585-484a-80b7-a110cad0edf3",
+										"type": "text/javascript",
+										"exec": [
+											"pm.environment.set(\"setId\", pm.response.json().id);",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Swedish - English\"\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All Flashcard Sets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Flashcard Set",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e11ce608-3da4-45d7-b9fe-73b9ed17d15d",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"front\": \"Dog\",\n\t\"back\": \"Hund\"\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets/{{setId}}",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets",
+										"{{setId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Flashcard Set",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "efaa854d-81f9-4f46-aef5-0915c974388a",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"Swedish - English Nouns\"\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets/{{setId}}",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets",
+										"{{setId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Flashcard Set",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "efaa854d-81f9-4f46-aef5-0915c974388a",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets/{{setId}}",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets",
+										"{{setId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "CardOps",
+					"description": "",
+					"item": [
+						{
+							"name": "Flashcard",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a70d794e-9fd4-4ce6-a64f-9bf29b18537a",
+										"type": "text/javascript",
+										"exec": [
+											"pm.environment.set(\"cardId\", pm.response.json().id);",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"front\": \"Högtalare\",\n\t\"back\": \"Speaker\"\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets/{{setId}}",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets",
+										"{{setId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteFlashcard",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c6144708-9682-4097-bd9e-79463b9e34ce",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"disabled": true
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{protocol}}{{domain}}:{{port}}/flashcards/sets/{{setId}}/{{cardId}}",
+									"host": [
+										"{{protocol}}{{domain}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"flashcards",
+										"sets",
+										"{{setId}}",
+										"{{cardId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}

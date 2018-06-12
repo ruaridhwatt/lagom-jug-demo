@@ -1,0 +1,18 @@
+<configuration>
+
+    <conversionRule conversionWord="coloredLevel" converterClass="com.lightbend.lagom.internal.logback.ColoredLevel" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{"HH:mm:ss.SSS"} %coloredLevel %logger [%mdc] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Set logging for all Play library classes to INFO -->
+    <logger name="Jackson" level="INFO" />
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
